@@ -24,6 +24,7 @@ from gi.repository import AppIndicator3 as appindicator
 from gi.repository import GLib as glib
 
 PING_FREQUENCY = 10 # seconds
+CWD = os.getcwd()
 
 class VPNTool:
     def __init__(self, config_data):
@@ -31,7 +32,7 @@ class VPNTool:
         self.ind = appindicator.Indicator.new_with_path('vpn_status',
                                               'VPN Status Indicator',
                                               appindicator.IndicatorCategory.APPLICATION_STATUS,
-                                              os.path.join(os.getcwd(), 'images'))
+                                              os.path.join(CWD, 'images'))
         self.ind.set_title("VPN Status Indicator")
         self.ind.set_status(appindicator.IndicatorStatus.ACTIVE)
         self.ind.set_icon_full(self.config_data['disconnected_image'], "VPN Status Indicator")
@@ -113,12 +114,17 @@ def read_config(filename):
 
 def options():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-c', '--conf', dest='config', default='default.json',
-            help="relative or absolute path to .json file (default: %(default)s)")
+    parser.add_argument('-c', '--conf', dest='config',
+            help="relative or absolute path to .json file (default: local default.json)")
     return parser.parse_args()
 
 if __name__ == "__main__":
     args = options()
-    config_data = read_config(args.config)
+    if args.config:
+        config_file = args.config
+    else:
+        config_file = os.path.join(CWD, 'default.json')
+
+    config_data = read_config(config_file)
     indicator = VPNTool(config_data)
     indicator.main()
