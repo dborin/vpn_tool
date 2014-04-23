@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=VPN Tool
+Description=Tool for using VPNC
+Comment=AppIndicator for VPNC
+Exec=/usr/local/vpn_tool/vpn_tool.sh
+Icon=/usr/share/icons/lock_blue.png
+Terminal=false
+Type=Application
+Categories=Security;
